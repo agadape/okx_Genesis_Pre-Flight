@@ -1,7 +1,6 @@
 import express from "express";
 import { paymentMiddleware, x402ResourceServer } from "@okxweb3/x402-express";
-// @ts-ignore
-import { ExactEvmScheme } from "@okxweb3/x402-evm/exact/server.js";
+import { ExactEvmScheme } from "@okxweb3/x402-evm/exact/server";
 import { OKXFacilitatorClient } from "@okxweb3/x402-core";
 import { config } from "./config.js";
 import { handleScan } from "./engine/types.js";
