@@ -1,0 +1,17 @@
+{
+  "archetype": "genesis-newcomer",
+  "target_type": "asp",
+  "target_id": "mock-newcomer-001",
+  "data": {
+    "marketplace_rating": null,
+    "sold_count": 0,
+    "review_count": 0,
+    "endpoint_liveness": true,
+    "endpoint_response_ms": 890,
+    "description": "New AI assistant for DeFi users",
+    "description_length": 35,
+    "price_usdt": 0.02,
+    "identity_verified": false,
+    "account_age_days": 3
+  }
+}

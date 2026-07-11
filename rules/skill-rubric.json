@@ -1,0 +1,83 @@
+{
+  "parameters": [
+    {
+      "id": "permission_scope",
+      "label": "Permission Scope",
+      "weight": 20,
+      "type": "categorical",
+      "categories": {
+        "minimal": 95,
+        "moderate": 60,
+        "broad": 30,
+        "excessive": 5
+      }
+    },
+    {
+      "id": "private_key_request",
+      "label": "Private Key Request Detection",
+      "weight": 0,
+      "type": "instant_fail",
+      "fail_status": "BAHAYA",
+      "fail_reason": "Skill requests private key, seed phrase, or wallet export — critical security risk. Immediate BAHAYA status regardless of other signals."
+    },
+    {
+      "id": "official_source",
+      "label": "Official Source",
+      "weight": 20,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 0
+    },
+    {
+      "id": "description_clarity",
+      "label": "Description Clarity",
+      "weight": 15,
+      "type": "range",
+      "thresholds": [
+        { "min": 100, "score": 90 },
+        { "min": 50, "score": 60 },
+        { "min": 20, "score": 30 },
+        { "min": 0, "score": 10 }
+      ]
+    },
+    {
+      "id": "code_transparency",
+      "label": "Code Transparency",
+      "weight": 15,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 20
+    },
+    {
+      "id": "dependency_count",
+      "label": "Dependency Count",
+      "weight": 15,
+      "type": "range_inverted",
+      "thresholds": [
+        { "max": 5, "score": 95 },
+        { "max": 15, "score": 70 },
+        { "max": 30, "score": 40 },
+        { "max": 999, "score": 10 }
+      ]
+    },
+    {
+      "id": "update_recency",
+      "label": "Update Recency",
+      "weight": 15,
+      "type": "range_inverted",
+      "thresholds": [
+        { "max": 30, "score": 95 },
+        { "max": 90, "score": 70 },
+        { "max": 180, "score": 40 },
+        { "max": 9999, "score": 10 }
+      ]
+    }
+  ],
+  "status_thresholds": {
+    "AMAN": 75,
+    "WASPADA": 40,
+    "BAHAYA": 0
+  },
+  "min_signals_required": 3,
+  "instant_fail_rules": ["private_key_request"]
+}

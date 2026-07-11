@@ -1,0 +1,95 @@
+{
+  "parameters": [
+    {
+      "id": "marketplace_rating",
+      "label": "Marketplace Rating",
+      "weight": 20,
+      "type": "range",
+      "thresholds": [
+        { "min": 4.5, "score": 95 },
+        { "min": 4.0, "score": 80 },
+        { "min": 3.0, "score": 60 },
+        { "min": 2.0, "score": 30 },
+        { "min": 0, "score": 10 }
+      ]
+    },
+    {
+      "id": "sold_count",
+      "label": "Sales Count",
+      "weight": 15,
+      "type": "range",
+      "thresholds": [
+        { "min": 100, "score": 95 },
+        { "min": 50, "score": 80 },
+        { "min": 10, "score": 60 },
+        { "min": 1, "score": 30 },
+        { "min": 0, "score": 10 }
+      ]
+    },
+    {
+      "id": "review_count",
+      "label": "Review Count",
+      "weight": 10,
+      "type": "range",
+      "thresholds": [
+        { "min": 20, "score": 95 },
+        { "min": 10, "score": 80 },
+        { "min": 3, "score": 60 },
+        { "min": 1, "score": 30 },
+        { "min": 0, "score": 10 }
+      ]
+    },
+    {
+      "id": "endpoint_liveness",
+      "label": "Endpoint Liveness",
+      "weight": 15,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 0
+    },
+    {
+      "id": "description_quality",
+      "label": "Description Quality",
+      "weight": 10,
+      "type": "range",
+      "thresholds": [
+        { "min": 200, "score": 90 },
+        { "min": 100, "score": 70 },
+        { "min": 50, "score": 40 },
+        { "min": 0, "score": 10 }
+      ]
+    },
+    {
+      "id": "price_reasonability",
+      "label": "Price Reasonability",
+      "weight": 10,
+      "type": "custom"
+    },
+    {
+      "id": "identity_verified",
+      "label": "Identity Verified (ERC-8004)",
+      "weight": 10,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 0
+    },
+    {
+      "id": "account_age_days",
+      "label": "Account Age",
+      "weight": 10,
+      "type": "range",
+      "thresholds": [
+        { "min": 90, "score": 95 },
+        { "min": 30, "score": 70 },
+        { "min": 7, "score": 40 },
+        { "min": 0, "score": 20 }
+      ]
+    }
+  ],
+  "status_thresholds": {
+    "AMAN": 75,
+    "WASPADA": 40,
+    "BAHAYA": 0
+  },
+  "min_signals_required": 3
+}

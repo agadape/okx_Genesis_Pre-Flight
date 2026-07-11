@@ -1,0 +1,17 @@
+{
+  "archetype": "established",
+  "target_type": "asp",
+  "target_id": "mock-established-001",
+  "data": {
+    "marketplace_rating": 4.7,
+    "sold_count": 245,
+    "review_count": 38,
+    "endpoint_liveness": true,
+    "endpoint_response_ms": 320,
+    "description": "Professional-grade portfolio analysis tool with real-time market data integration, historical trend analysis, and risk-adjusted return calculations. Supports 15+ chains including Ethereum, Solana, and XLayer. Built with enterprise reliability standards. Audited by CertiK. 99.9% uptime guarantee.",
+    "description_length": 295,
+    "price_usdt": 0.10,
+    "identity_verified": true,
+    "account_age_days": 142
+  }
+}

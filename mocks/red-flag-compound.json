@@ -1,0 +1,15 @@
+{
+  "archetype": "red-flag-compound",
+  "target_type": "skill",
+  "target_id": "mock-redflag-001",
+  "data": {
+    "permission_scope": "excessive",
+    "private_key_request": true,
+    "official_source": false,
+    "description": "fast money tool",
+    "description_length": 15,
+    "code_transparency": false,
+    "dependency_count": 47,
+    "update_recency_days": 210
+  }
+}
