@@ -38,6 +38,22 @@ const paymentGate = paymentMiddleware(
 
 app.get("/health", healthHandler);
 
+// Agent Metadata for ERC-8004 Registration
+app.get("/metadata.json", (req, res) => {
+  res.json({
+    name: "Pre-Flight",
+    description: "Trust & Safety scanner for ASPs and Skills on OKX AI. Evaluates risk based on marketplace rating, liveness, and code transparency.",
+    image: "https://cryptologos.cc/logos/okb-okb-logo.png", // fallback image
+    capabilities: ["security-scanning", "risk-assessment"],
+    endpoints: {
+      a2mcp: "https://okx-genesis-pre-flight.vercel.app/scan",
+      mcp: null,
+      a2a: null
+    },
+    protocols: ["A2MCP", "x402"]
+  });
+});
+
 // The /scan route is now fully protected by the x402 payment gate!
 app.post("/scan", paymentGate, handleScan);
 
