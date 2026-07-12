@@ -86,6 +86,15 @@ export async function reportHandler(req: Request, res: Response) {
           <p>Based on ${scan.signals_available} out of ${scan.signals_total} possible risk signals.</p>
         </div>
 
+        ${scan.live_verification?.findings && scan.live_verification.findings.length > 0 ? `
+        <div class="reasons" style="border-left: 4px solid #00C851; background: #e8f5e9;">
+          <h3 style="color: #007E33;">Live Verification Findings (Mystery Shopper):</h3>
+          <ul>
+            ${scan.live_verification.findings.map((f: any) => `<li>${f}</li>`).join('')}
+          </ul>
+        </div>
+        ` : ''}
+
         ${scan.reasons.length > 0 ? `
         <div class="reasons">
           <h3>Risk Factors Detected:</h3>
