@@ -11,7 +11,7 @@ async function main() {
     
     // 1. Fetch & Score (Phase 2)
     console.log("Fetching external manifest...");
-    const manifestData = await fetchExternalManifest(target_id).catch(() => ({}));
+    const manifestData = await fetchExternalManifest(target_id).catch(() => ({} as any));
     const result = scoreExternalAgent(target_id, manifestData);
     
     // 2. Mystery Shopper (Idea J)
