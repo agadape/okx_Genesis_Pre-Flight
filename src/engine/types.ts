@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export type TargetType = "asp" | "skill";
+export type TargetType = "asp" | "skill" | "external";
 
 export type RiskStatus = "AMAN" | "WASPADA" | "BAHAYA" | "DATA_BELUM_CUKUP";
 
@@ -20,7 +20,9 @@ export interface ScanResult {
   data_source: DataSource;
   signals_available: number;
   signals_total: number;
-  timestamp: string;
+  timestamp?: string;
+  scan_id?: string;
+  report_url?: string;
 }
 
 export interface ParameterResult {
@@ -69,6 +71,8 @@ export async function handleScan(req: Request, res: Response): Promise<void> {
   // Lazy import to avoid circular deps
   const { processASP } = await import("./score-asp.js");
   const { processSkill } = await import("./score-skill.js");
+  const { fetchExternalManifest } = await import("../lib/fetch-external-manifest.js");
+  const { scoreExternalAgent } = await import("../lib/score-external.js");
   const { fetchTargetData } = await import("../data/fetcher.js");
   const { buildResponse } = await import("../response/builder.js");
 
@@ -83,24 +87,28 @@ export async function handleScan(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    if (target_type !== "asp" && target_type !== "skill") {
+    if (target_type !== "asp" && target_type !== "skill" && target_type !== "external") {
       res.status(400).json({
         status: "error",
-        error: 'Invalid target_type. Must be "asp" or "skill"',
+        error: 'Invalid target_type. Must be "asp", "skill", or "external"',
       });
       return;
     }
 
-    const fetchedData = await fetchTargetData(target_type, target_id);
-
     let result: ScanResult;
-    if (target_type === "asp") {
-      result = processASP(target_id, fetchedData);
+    if (target_type === "external") {
+      const manifestData = await fetchExternalManifest(target_id);
+      result = scoreExternalAgent(target_id, manifestData);
     } else {
-      result = processSkill(target_id, fetchedData);
+      const fetchedData = await fetchTargetData(target_type, target_id);
+      if (target_type === "asp") {
+        result = processASP(target_id, fetchedData);
+      } else {
+        result = processSkill(target_id, fetchedData);
+      }
     }
 
-    const response = buildResponse(result);
+    const response = await buildResponse(result);
     res.json(response);
   } catch (error) {
     console.error("Scan error:", error);

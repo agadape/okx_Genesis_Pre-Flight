@@ -1,0 +1,79 @@
+{
+  "parameters": [
+    {
+      "id": "manifest_validity",
+      "label": "Manifest Validity",
+      "weight": 20,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 0
+    },
+    {
+      "id": "https_enforcement",
+      "label": "HTTPS Enforcement",
+      "weight": 20,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 0
+    },
+    {
+      "id": "permission_scope",
+      "label": "Permission Scope Declared",
+      "weight": 15,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 50
+    },
+    {
+      "id": "private_key_request",
+      "label": "Private Key Request Pattern",
+      "weight": 0,
+      "type": "instant_fail",
+      "fail_status": "BAHAYA",
+      "fail_reason": "Manifest requests sensitive wallet private keys or seed phrases."
+    },
+    {
+      "id": "domain_age",
+      "label": "Domain Age",
+      "weight": 10,
+      "type": "range",
+      "thresholds": [
+        { "min": 365, "score": 100 },
+        { "min": 90, "score": 80 },
+        { "min": 30, "score": 60 },
+        { "min": 0, "score": 30 }
+      ]
+    },
+    {
+      "id": "endpoint_liveness",
+      "label": "Endpoint Liveness",
+      "weight": 15,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 20
+    },
+    {
+      "id": "prompt_injection_pattern",
+      "label": "Prompt Injection Pattern Scan",
+      "weight": 15,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 10
+    },
+    {
+      "id": "third_party_verification",
+      "label": "Third Party Verification Link",
+      "weight": 5,
+      "type": "binary",
+      "pass_score": 100,
+      "fail_score": 80
+    }
+  ],
+  "status_thresholds": {
+    "AMAN": 75,
+    "WASPADA": 40,
+    "BAHAYA": 0
+  },
+  "min_signals_required": 3,
+  "instant_fail_rules": ["private_key_request"]
+}

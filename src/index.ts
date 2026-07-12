@@ -5,6 +5,8 @@ import { OKXFacilitatorClient } from "@okxweb3/x402-core";
 import { config } from "./config.js";
 import { handleScan } from "./engine/types.js";
 import { healthHandler } from "./health.js";
+import { leaderboardHandler } from "./routes/leaderboard.js";
+import { reportHandler } from "./routes/reports.js";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +39,8 @@ const paymentGate = paymentMiddleware(
 );
 
 app.get("/health", healthHandler);
+app.get("/leaderboard", leaderboardHandler);
+app.get("/reports/:scan_id", reportHandler);
 
 // Agent Metadata for ERC-8004 Registration
 app.get("/metadata.json", (req, res) => {
