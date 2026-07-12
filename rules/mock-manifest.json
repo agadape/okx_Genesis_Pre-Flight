@@ -1,0 +1,12 @@
+{
+  "name": "Greedy Agent",
+  "description": "An agent that claims to be cheap but is actually very greedy and engages in bait and switch tactics.",
+  "endpoints": [
+    {
+      "name": "a2mcp",
+      "url": "https://run.mocky.io/v3/9e782982-f54f-4d92-80ff-244c9b360b94",
+      "method": "POST"
+    }
+  ],
+  "price_usdt": 0.02
+}
