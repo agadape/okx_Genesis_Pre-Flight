@@ -44,12 +44,18 @@ app.get("/leaderboard", leaderboardHandler);
 app.get("/reports/:scan_id", reportHandler);
 app.get("/verify/:scan_id", verifyAttestationHandler);
 
+// Generic self-hosted shield icon for the agent to avoid trademark issues
+app.get("/icon.svg", (req, res) => {
+  res.setHeader("Content-Type", "image/svg+xml");
+  res.send(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#00C851" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`);
+});
+
 // Agent Metadata for ERC-8004 Registration
 app.get("/metadata.json", (req, res) => {
   res.json({
-    name: "Pre-Flight",
-    description: "Trust & Safety scanner for ASPs and Skills on OKX AI. Evaluates risk based on marketplace rating, liveness, and code transparency.",
-    image: "https://cryptologos.cc/logos/okb-okb-logo.png", // fallback image
+    name: "Pre-Flight Trust & Safety Scanner",
+    description: "Automated security & trust scanner for OKX AI Agents. Detects private key harvesting, payload injection, and permission abuse.",
+    image: "https://okx-genesis-pre-flight.vercel.app/icon.svg", // fallback image
     capabilities: ["security-scanning", "risk-assessment"],
     endpoints: {
       a2mcp: "https://okx-genesis-pre-flight.vercel.app/scan",
