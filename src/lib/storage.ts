@@ -42,6 +42,11 @@ export async function getScanResult(scan_id: string): Promise<ScanResult | null>
     }
 }
 
+export async function getScanById(scanId: string): Promise<ScanResult | null> {
+    if (!redis) return null;
+    return await redis.get<ScanResult>(`scan:${scanId}`);
+}
+
 export async function getRecentScans(limit: number = 50): Promise<ScanResult[]> {
     if (!redis) return [];
     

@@ -25,6 +25,7 @@ export interface ScanResult {
   scan_id?: string;
   report_url?: string;
   live_verification?: any;
+  attestation?: any;
 }
 
 export interface ParameterResult {

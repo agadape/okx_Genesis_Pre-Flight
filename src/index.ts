@@ -7,6 +7,7 @@ import { handleScan } from "./engine/types.js";
 import { healthHandler } from "./health.js";
 import { leaderboardHandler } from "./routes/leaderboard.js";
 import { reportHandler } from "./routes/reports.js";
+import { verifyAttestationHandler } from "./routes/verify.js";
 
 const app = express();
 app.use(express.json());
@@ -41,6 +42,7 @@ const paymentGate = paymentMiddleware(
 app.get("/health", healthHandler);
 app.get("/leaderboard", leaderboardHandler);
 app.get("/reports/:scan_id", reportHandler);
+app.get("/verify/:scan_id", verifyAttestationHandler);
 
 // Agent Metadata for ERC-8004 Registration
 app.get("/metadata.json", (req, res) => {
