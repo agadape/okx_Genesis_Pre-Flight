@@ -9,7 +9,7 @@ export async function seed() {
     const dummyScans: Omit<ScanResult, "scan_id" | "timestamp">[] = [
         {
             target_type: "external",
-            target_id: "https://example.com/manifest.json",
+            target_id: "[SAMPLE] https://example.com/manifest.json",
             status: "AMAN",
             score: 95,
             data_source: "live",
@@ -19,7 +19,7 @@ export async function seed() {
         },
         {
             target_type: "asp",
-            target_id: "defi-portfolio-analyzer-5100",
+            target_id: "[SAMPLE] defi-portfolio-analyzer-5100",
             status: "WASPADA",
             score: 65,
             data_source: "mocked",
@@ -29,7 +29,7 @@ export async function seed() {
         },
         {
             target_type: "skill",
-            target_id: "fast-swap-pro-99",
+            target_id: "[SAMPLE] fast-swap-pro-99",
             status: "BAHAYA",
             score: 10,
             data_source: "mocked",

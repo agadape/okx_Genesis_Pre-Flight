@@ -1,21 +1,9 @@
 import { Request, Response } from "express";
 import { getRecentScans } from "../lib/storage.js";
-import { seed } from "../scripts/seed-leaderboard.js";
 
 export async function leaderboardHandler(req: Request, res: Response) {
   try {
     let scans = await getRecentScans(50);
-
-    // Auto-seed if empty (mitigation for Vercel Serverless cold start storage inconsistency during demo)
-    if (scans.length === 0) {
-      console.log("[leaderboard] Storage empty, auto-seeding data for demo stability...");
-      try {
-        await seed();
-        scans = await getRecentScans(50);
-      } catch (e) {
-        console.error("Auto-seed failed:", e);
-      }
-    }
 
     const rows = scans.map(scan => {
       const isDanger = scan.status === "BAHAYA";
