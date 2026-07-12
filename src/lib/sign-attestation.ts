@@ -58,6 +58,10 @@ export async function signPreFlightAttestation(
         signer_agent_id: "5146",
         signature,
         verify_instructions: "Recover address from this signature using EIP-712 (ethers.verifyTypedData or viem verifyTypedData) and match with signer_address.",
-        payload: message // return payload so we can save and verify it later
+        payload: {
+            ...message,
+            score: message.score.toString(),
+            timestamp: message.timestamp.toString()
+        } // return payload so we can save and verify it later
     };
 }
