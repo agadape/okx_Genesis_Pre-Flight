@@ -9,6 +9,7 @@ export type DataSource = "live" | "mocked";
 export interface ScanRequest {
   target_type: TargetType;
   target_id: string;
+  verify_live?: boolean;
 }
 
 export interface ScanResult {
@@ -23,6 +24,7 @@ export interface ScanResult {
   timestamp?: string;
   scan_id?: string;
   report_url?: string;
+  live_verification?: any;
 }
 
 export interface ParameterResult {
@@ -75,9 +77,11 @@ export async function handleScan(req: Request, res: Response): Promise<void> {
   const { scoreExternalAgent } = await import("../lib/score-external.js");
   const { fetchTargetData } = await import("../data/fetcher.js");
   const { buildResponse } = await import("../response/builder.js");
+  const { FEATURES } = await import("../config/feature-flags.js");
+  const { runMysteryShopper } = await import("../lib/mystery-shopper.js");
 
   try {
-    const { target_type, target_id } = req.body as ScanRequest;
+    const { target_type, target_id, verify_live } = req.body as ScanRequest;
 
     if (!target_type || !target_id) {
       res.status(400).json({
@@ -96,16 +100,54 @@ export async function handleScan(req: Request, res: Response): Promise<void> {
     }
 
     let result: ScanResult;
+    let endpointUrl = "";
+    let advertisedPrice = 0.05; // default fallback
+
     if (target_type === "external") {
       const manifestData = await fetchExternalManifest(target_id);
       result = scoreExternalAgent(target_id, manifestData);
+      endpointUrl = target_id; // For external, target_id is the URL
     } else {
       const fetchedData = await fetchTargetData(target_type, target_id);
       if (target_type === "asp") {
         result = processASP(target_id, fetchedData);
+        advertisedPrice = (fetchedData as any).price_usdt || 0.05;
+        endpointUrl = "https://mock.okx.ai/asp/" + target_id; // Mock URL for ASP
       } else {
         result = processSkill(target_id, fetchedData);
+        advertisedPrice = 0.02; // Skills are usually cheaper
+        endpointUrl = "https://mock.okx.ai/skill/" + target_id;
       }
+    }
+
+    if (verify_live && FEATURES.MYSTERY_SHOPPER_ENABLED) {
+      const liveVerification = await runMysteryShopper(target_id, endpointUrl, advertisedPrice);
+      result.live_verification = liveVerification;
+
+      // Adjust score based on findings (2d. Bobot di Scoring)
+      if (liveVerification.attempted) {
+         if (!liveVerification.promise_kept) {
+            // Downgrade status if it failed promises
+            const hasBaitAndSwitch = liveVerification.findings.some(f => f.includes("Bait-and-switch"));
+            if (hasBaitAndSwitch) {
+               result.status = "BAHAYA";
+               result.score = Math.min(result.score, 30);
+               result.reasons.push("[Live Test] Bait-and-switch pricing detected");
+            } else if (result.status === "AMAN") {
+               result.status = "WASPADA";
+               result.score = Math.min(result.score, 70);
+               result.reasons.push("[Live Test] Service failed to keep promises or was slow/broken");
+            }
+         } else {
+            // Boost score slightly for proven live endpoint
+            result.score = Math.min(100, result.score + 10);
+            if (result.status === "WASPADA" && result.score >= 75) {
+               result.status = "AMAN";
+            }
+         }
+      }
+    } else if (verify_live) {
+      result.live_verification = { attempted: false };
     }
 
     const response = await buildResponse(result);

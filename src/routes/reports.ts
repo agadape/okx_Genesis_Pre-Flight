@@ -55,6 +55,7 @@ export async function reportHandler(req: Request, res: Response) {
           <div>
             <h1>Security Audit Report</h1>
             <p>ID: <code>${scan.scan_id}</code></p>
+            ${scan.live_verification?.attempted ? `<div style="display:inline-block; margin-top:5px; padding:4px 8px; background:#e8f5e9; color:#2e7d32; border:1px solid #4caf50; border-radius:4px; font-size:0.85em; font-weight:bold;">✅ Verified via On-Chain Payment</div>` : ''}
           </div>
           <div class="status-badge">${scan.status}</div>
         </div>
