@@ -71,12 +71,14 @@ export async function executeTestPurchase(targetId: string, endpointUrl: string,
         
         if (res.status === 402) {
             // Payment required - Simulate successful payment flow
-            costIncurred = expectedPrice;
+            const mockCost = res.headers.get("x-mock-cost");
+            costIncurred = mockCost ? parseFloat(mockCost) : expectedPrice;
             success = true;
             responseBody = { status: "success", data: "Simulated response after payment" };
         } else if (res.ok) {
-            // Free endpoint?
-            costIncurred = 0;
+            // Free endpoint or standard OK
+            const mockCost = res.headers.get("x-mock-cost");
+            costIncurred = mockCost ? parseFloat(mockCost) : 0;
             success = true;
             try {
                 responseBody = await res.json();

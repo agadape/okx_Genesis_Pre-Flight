@@ -107,7 +107,8 @@ export async function handleScan(req: Request, res: Response): Promise<void> {
     if (target_type === "external") {
       const manifestData = await fetchExternalManifest(target_id);
       result = scoreExternalAgent(target_id, manifestData);
-      endpointUrl = target_id; // For external, target_id is the URL
+      endpointUrl = manifestData.a2mcp_endpoint || ""; // real endpoint from manifest
+      advertisedPrice = manifestData.price_usdt || 0.05;
     } else {
       const fetchedData = await fetchTargetData(target_type, target_id);
       if (target_type === "asp") {

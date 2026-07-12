@@ -8,6 +8,8 @@ export interface ExternalManifestData {
   prompt_injection_pattern: boolean;
   third_party_verification: boolean;
   injection_matches?: string[];
+  price_usdt?: number;
+  a2mcp_endpoint?: string;
 }
 
 export async function fetchExternalManifest(url: string): Promise<ExternalManifestData> {
@@ -68,6 +70,14 @@ export async function fetchExternalManifest(url: string): Promise<ExternalManife
     }
 
     result.manifest_validity = true;
+    result.price_usdt = data.price_usdt;
+    
+    if (data.endpoints && Array.isArray(data.endpoints)) {
+      const a2mcp = data.endpoints.find((ep: any) => ep.name === "a2mcp" || (ep.url && ep.url.includes("a2mcp")));
+      if (a2mcp) result.a2mcp_endpoint = a2mcp.url;
+    } else if (data.endpoints && typeof data.endpoints === 'object') {
+      result.a2mcp_endpoint = data.endpoints.a2mcp;
+    }
 
     // 5. HTTPS Enforcement for endpoints
     result.https_enforcement = true;
