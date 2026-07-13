@@ -57,12 +57,12 @@ export async function fetchExternalManifest(url: string): Promise<ExternalManife
     }
 
     // 3. Parse JSON
-    const contentType = response.headers.get("content-type");
-    if (!contentType?.includes("application/json")) {
+    let data;
+    try {
+      data = await response.json();
+    } catch {
       return result;
     }
-
-    const data = await response.json();
 
     // 4. Validate essential fields
     if (!data.name || !data.description) {
