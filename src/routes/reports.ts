@@ -16,6 +16,8 @@ export async function reportHandler(req: Request, res: Response) {
       return;
     }
 
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+
     const isDanger = scan.status === "BAHAYA";
     const statusColor = isDanger ? "#ff4444" : (scan.status === "WASPADA" ? "#ffbb33" : "#00C851");
     

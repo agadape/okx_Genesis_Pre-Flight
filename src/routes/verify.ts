@@ -30,6 +30,8 @@ export async function verifyAttestationHandler(req: Request, res: Response) {
         const statusColor = isValid ? "#00C851" : "#ff4444";
         const statusText = isValid ? "VALID" : "INVALID / TAMPERED";
 
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+
         const html = `
         <!DOCTYPE html>
         <html lang="en">
