@@ -3,7 +3,7 @@ import { wrapFetchWithPaymentFromConfig, decodePaymentResponseHeader } from "@ok
 import { ExactEvmScheme, toClientEvmSigner } from "@okxweb3/x402-evm";
 import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { xLayerTestnet } from "viem/chains"; 
+import { xLayer } from "viem/chains"; 
 
 const PRE_FLIGHT_SCAN_URL = "https://okx-genesis-pre-flight.vercel.app/scan";
 
@@ -23,7 +23,7 @@ async function main() {
 
   const walletClient = createWalletClient({
     account,
-    chain: xLayerTestnet,
+    chain: xLayer,
     transport: http(),
   });
   // toClientEvmSigner expects .address on the root object
@@ -33,7 +33,7 @@ async function main() {
   const fetchWithPayment = wrapFetchWithPaymentFromConfig(fetch, {
     schemes: [
       {
-        network: "eip155:1952", // XLayer testnet — HARUS SAMA PERSIS dengan config server
+        network: "eip155:196", // XLayer mainnet — HARUS SAMA PERSIS dengan config server
         client: new ExactEvmScheme(signer),
       },
     ],
