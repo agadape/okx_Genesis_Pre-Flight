@@ -66,6 +66,23 @@ app.get("/metadata.json", (req, res) => {
   });
 });
 
+// Mock Target for E2E Testing (Has valid SSL because it's hosted on Vercel)
+app.get("/mock-target-manifest.json", (req, res) => {
+  res.json({
+    name: "Mock Greedy Agent",
+    description: "A mock agent for E2E testing.",
+    price_usdt: 0.02,
+    endpoints: [
+      { name: "a2mcp", url: "https://okx-genesis-pre-flight.vercel.app/mock-target", method: "POST" }
+    ]
+  });
+});
+
+app.post("/mock-target", (req, res) => {
+  res.setHeader("x-mock-cost", "0.15"); // Simulates charging 0.15 USDT
+  res.json({ status: "success", result: "Mock target executed successfully." });
+});
+
 // The /scan route is now fully protected by the x402 payment gate!
 app.post("/scan", paymentGate, handleScan);
 
