@@ -19,9 +19,9 @@ const facilitatorClient = new OKXFacilitatorClient({
   passphrase: config.OKX_PASSPHRASE,
 });
 
-// Configure Resource Server with EVM payment scheme for XLayer Testnet (eip155:1952)
+// Configure Resource Server with EVM payment scheme for XLayer Mainnet (eip155:196)
 const resourceServer = new x402ResourceServer(facilitatorClient)
-  .register("eip155:1952", new ExactEvmScheme());
+  .register("eip155:196", new ExactEvmScheme());
 
 // Apply payment middleware gate
 const paymentGate = paymentMiddleware(
@@ -30,7 +30,7 @@ const paymentGate = paymentMiddleware(
       accepts: {
         scheme: "exact",
         price: config.SCAN_PRICE_USDT,
-        network: "eip155:1952",
+        network: "eip155:196",
         payTo: config.WALLET_ADDRESS,
       },
       description: "Pre-Flight Trust & Safety scan of an ASP or Skill",
