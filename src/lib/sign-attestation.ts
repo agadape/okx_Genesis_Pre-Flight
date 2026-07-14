@@ -3,6 +3,7 @@ import { privateKeyToAccount } from "viem/accounts";
 import { xLayer } from "viem/chains";
 import "dotenv/config";
 import { AttestationTypes, domain, AttestationPayload } from "./attestation-schema.js";
+import { config } from "../config.js";
 
 // SHA-256 equivalent in viem is usually keccak256 for EVM, but we can just use viem's hash functions.
 // We will use keccak256 of the stringified JSON.
@@ -35,7 +36,7 @@ export async function signPreFlightAttestation(
     const ts = BigInt(Math.floor(new Date(timestampStr).getTime() / 1000));
 
     const message: AttestationPayload = {
-        scanner_agent_id: "5549",
+        scanner_agent_id: config.PREFLIGHT_AGENT_ID,
         target_type: targetType,
         target_id: targetId,
         status,
@@ -55,7 +56,7 @@ export async function signPreFlightAttestation(
 
     return {
         signer_address: account.address,
-        signer_agent_id: "5549",
+        signer_agent_id: config.PREFLIGHT_AGENT_ID,
         signature,
         verify_instructions: "Recover address from this signature using EIP-712 (ethers.verifyTypedData or viem verifyTypedData) and match with signer_address.",
         payload: {

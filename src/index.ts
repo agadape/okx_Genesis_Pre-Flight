@@ -8,6 +8,8 @@ import { healthHandler } from "./health.js";
 import { leaderboardHandler } from "./routes/leaderboard.js";
 import { reportHandler } from "./routes/reports.js";
 import { verifyAttestationHandler } from "./routes/verify.js";
+import { landingHandler } from "./routes/landing.js";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 app.use(express.json());
@@ -39,6 +41,16 @@ const paymentGate = paymentMiddleware(
   resourceServer
 );
 
+// Apply a basic rate limiter to prevent spam/abuse
+const scanLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // Limit each IP to 10 scan requests per windowMs
+  message: { error: "Too many scan requests from this IP, please try again after a minute" },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.get("/", landingHandler);
 app.get("/health", healthHandler);
 app.get("/leaderboard", leaderboardHandler);
 app.get("/reports/:scan_id", reportHandler);
@@ -83,8 +95,8 @@ app.post("/mock-target", (req, res) => {
   res.json({ status: "success", result: "Mock target executed successfully." });
 });
 
-// The /scan route is now fully protected by the x402 payment gate!
-app.post("/scan", paymentGate, handleScan);
+// The /scan route is now fully protected by the x402 payment gate AND a rate limiter!
+app.post("/scan", scanLimiter, paymentGate, handleScan);
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(config.PORT, () => {

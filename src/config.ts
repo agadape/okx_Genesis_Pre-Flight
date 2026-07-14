@@ -8,6 +8,7 @@ const envSchema = z.object({
   WALLET_ADDRESS: z.string().default("0x0000000000000000000000000000000000000000"),
   PORT: z.coerce.number().default(3000),
   SCAN_PRICE_USDT: z.string().default("0.05"),
+  PREFLIGHT_AGENT_ID: z.string().default("5549"),
 });
 
 export const config = envSchema.parse(process.env);
