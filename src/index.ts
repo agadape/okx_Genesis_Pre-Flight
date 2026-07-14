@@ -9,7 +9,7 @@ import { leaderboardHandler } from "./routes/leaderboard.js";
 import { reportHandler } from "./routes/reports.js";
 import { verifyAttestationHandler } from "./routes/verify.js";
 import { landingHandler } from "./routes/landing.js";
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 
 const app = express();
 app.use(express.json());
