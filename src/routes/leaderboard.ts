@@ -130,7 +130,7 @@ export async function leaderboardHandler(req: Request, res: Response) {
                 </tr>
               </thead>
               <tbody>
-                ${scans.length > 0 ? rows : \`
+                ${scans.length > 0 ? rows : `
                   <tr>
                     <td colspan="6" class="py-12 text-center text-zinc-600 font-mono">
                       <div class="flex flex-col items-center gap-3">
@@ -139,7 +139,7 @@ export async function leaderboardHandler(req: Request, res: Response) {
                       </div>
                     </td>
                   </tr>
-                \`}
+                `}
               </tbody>
             </table>
           </div>
@@ -152,7 +152,7 @@ export async function leaderboardHandler(req: Request, res: Response) {
       </script>
     </body>
     </html>
-    \`;
+    `;
 
     res.send(html);
   } catch (e) {
