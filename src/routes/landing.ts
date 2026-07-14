@@ -35,8 +35,10 @@ export function landingHandler(req: Request, res: Response) {
     </head>
     <body class="relative w-full bg-zinc-950 text-white overflow-x-hidden font-sans min-h-screen flex flex-col">
       
-      <!-- Background Image -->
-      <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
+      <!-- Background Video -->
+      <video autoplay loop muted playsinline class="absolute inset-0 z-0 w-full h-full object-cover opacity-[0.15] pointer-events-none">
+        <source src="/bg-video.mp4" type="video/mp4">
+      </video>
       <!-- Subtle top gradient to ensure text readability -->
       <div class="absolute inset-0 z-0 bg-gradient-to-b from-zinc-950 via-transparent to-zinc-950"></div>
 

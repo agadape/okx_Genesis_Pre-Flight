@@ -13,6 +13,7 @@ import { rateLimit } from "express-rate-limit";
 
 const app = express();
 app.use(express.json());
+app.use(express.static("public")); // Serve static assets like videos
 
 // Initialize OKX Facilitator Client for x402
 const facilitatorClient = new OKXFacilitatorClient({
