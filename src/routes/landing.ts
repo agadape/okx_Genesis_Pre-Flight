@@ -193,5 +193,3 @@ export function landingHandler(req: Request, res: Response) {
     `;
     res.send(html);
 }
-    res.send(html);
-}
