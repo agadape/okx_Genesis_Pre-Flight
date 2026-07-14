@@ -8,216 +8,190 @@ export function landingHandler(req: Request, res: Response) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Pre-Flight | Zero-Trust for OKX.AI</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://unpkg.com/lucide@latest"></script>
       <style>
-        :root {
-            --bg-base: #050505;
-            --bg-card: rgba(255, 255, 255, 0.02);
-            --border-card: rgba(255, 255, 255, 0.05);
-            --text-main: #fafafa;
-            --text-muted: #a1a1aa;
-            --accent: #00ff9d;
-            --accent-glow: rgba(0, 255, 157, 0.15);
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-base); 
-            color: var(--text-main); 
-            margin: 0; 
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
         }
-        /* Subtle glowing background orb */
-        .glow-bg {
-            position: fixed;
-            top: -20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 600px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
-            filter: blur(80px);
+        .animate-fade-in {
+          animation: fadeSlideIn 0.8s ease-out forwards;
+          opacity: 0;
         }
-        .container { 
-            max-width: 1000px; 
-            margin: 0 auto; 
-            padding: 80px 24px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
         }
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            background: rgba(0, 255, 157, 0.05);
-            border: 1px solid rgba(0, 255, 157, 0.2);
-            border-radius: 100px;
-            color: var(--accent);
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
-        }
-        h1 { 
-            font-size: 4rem; 
-            font-weight: 700; 
-            letter-spacing: -0.04em;
-            margin-bottom: 16px;
-            line-height: 1.1;
-            background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        h2 {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            font-weight: 400;
-            max-width: 600px;
-            margin: 0 auto 48px auto;
-            line-height: 1.6;
-        }
-        /* Bento Box Grid */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            width: 100%;
-            margin-bottom: 48px;
-        }
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-card);
-            border-radius: 16px;
-            padding: 32px 24px;
-            text-align: left;
-            transition: border-color 0.3s ease, transform 0.3s ease;
-        }
-        .card:hover {
-            border-color: rgba(0, 255, 157, 0.3);
-            transform: translateY(-2px);
-        }
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .card-desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-        .span-2 { grid-column: span 2; }
-        .span-3 { grid-column: span 3; }
-        
-        .actions {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .btn {
-            padding: 12px 28px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .btn-primary {
-            background: var(--text-main);
-            color: var(--bg-base);
-            border: 1px solid transparent;
-        }
-        .btn-primary:hover {
-            background: #e4e4e7;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-main);
-            border: 1px solid var(--border-card);
-        }
-        .btn-secondary:hover {
-            border-color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 32px 24px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-card);
-        }
-        .footer span { color: var(--accent); }
-
-        @media (max-width: 768px) {
-            .bento-grid { grid-template-columns: 1fr; }
-            .span-2, .span-3 { grid-column: span 1; }
-            h1 { font-size: 3rem; }
-        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
       </style>
     </head>
-    <body>
-      <div class="glow-bg"></div>
+    <body class="relative w-full bg-zinc-950 text-white overflow-x-hidden font-sans min-h-screen flex flex-col">
       
-      <div class="container">
-        <div class="badge">ASP IDENTITY: #5549</div>
-        <h1>Zero-Trust<br>for OKX.AI Agents</h1>
-        <h2>The ultimate immune system shielding users from manifest spoofing, bait-and-switch pricing, and malicious payloads.</h2>
-        
-        <div class="bento-grid">
-            <div class="card span-2">
-                <div class="card-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    Live Mystery Shopper
-                </div>
-                <div class="card-desc">
-                    Before a user connects, Pre-Flight deploys an on-chain simulated request. We force the target agent to reveal its true payload and actual pricing, stopping bait-and-switch traps instantly.
-                </div>
-            </div>
+      <!-- Background Image with Gradient Mask (Replace URL with your generated image later) -->
+      <div 
+        class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"
+        style="mask-image: linear-gradient(180deg, transparent, black 0%, black 70%, transparent); -webkit-mask-image: linear-gradient(180deg, transparent, black 0%, black 70%, transparent);"
+      ></div>
+
+      <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pt-24 pb-12 sm:px-6 md:pt-32 md:pb-20 lg:px-8 flex-grow">
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8 items-start">
+          
+          <!-- LEFT COLUMN -->
+          <div class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-8">
             
-            <div class="card">
-                <div class="card-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    EIP-712 Secured
-                </div>
-                <div class="card-desc">
-                    Every security scan is cryptographically signed using viem, issuing an undeniable attestation report.
-                </div>
+            <!-- Badge -->
+            <div class="animate-fade-in delay-100">
+              <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-md transition-colors hover:bg-white/10">
+                <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
+                  Agent ID: #5549
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5 text-green-400"></i>
+                </span>
+              </div>
             </div>
 
-            <div class="card span-3" style="display: flex; align-items: center; justify-content: space-between; padding: 24px 32px; background: rgba(0, 255, 157, 0.02); border-color: rgba(0, 255, 157, 0.1);">
-                <div>
-                    <div class="card-title" style="color: var(--accent);">Monetized via x402 Protocol</div>
-                    <div class="card-desc">Natively integrated on XLayer Mainnet. Pay-per-scan API (0.05 USDT) settled seamlessly on-chain.</div>
-                </div>
-                <div class="actions" style="margin: 0;">
-                    <a href="/leaderboard" class="btn btn-primary">View Leaderboard</a>
-                    <a href="/reports/8f18b739-cefd-4b44-a3b4-3609a966b58f" class="btn btn-secondary">Sample Report</a>
-                </div>
+            <!-- Heading -->
+            <h1 
+              class="animate-fade-in delay-200 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tighter leading-[0.9]"
+              style="mask-image: linear-gradient(180deg, black 0%, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(180deg, black 0%, black 80%, transparent 100%);"
+            >
+              Securing the Next<br />
+              <span class="bg-gradient-to-br from-white via-white to-[#00ff9d] bg-clip-text text-transparent">
+                Generation
+              </span><br />
+              of AI Agents
+            </h1>
+
+            <!-- Description -->
+            <p class="animate-fade-in delay-300 max-w-xl text-lg text-zinc-400 leading-relaxed">
+              Pre-Flight is the zero-trust immune system for OKX.AI. We detect malicious payloads and bait-and-switch pricing traps before you ever connect your wallet.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4">
+              <a href="/leaderboard" class="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-zinc-950 transition-all hover:scale-[1.02] hover:bg-zinc-200 active:scale-[0.98] cursor-pointer">
+                View Leaderboard
+                <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+              </a>
+              
+              <a href="/reports/8f18b739-cefd-4b44-a3b4-3609a966b58f" class="group inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10 hover:border-white/20 cursor-pointer">
+                <i data-lucide="file-text" class="w-4 h-4"></i>
+                Sample Report
+              </a>
             </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="lg:col-span-5 space-y-6 lg:mt-12">
+            
+            <!-- Stats Card -->
+            <div class="animate-fade-in delay-500 relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl shadow-2xl">
+              <!-- Card Glow Effect -->
+              <div class="absolute top-0 right-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-green-500/10 blur-3xl pointer-events-none"></div>
+
+              <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-8">
+                  <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
+                    <i data-lucide="zap" class="h-6 w-6 text-green-400"></i>
+                  </div>
+                  <div>
+                    <div class="text-3xl font-bold tracking-tight text-white">0.05 USDT</div>
+                    <div class="text-sm text-zinc-400">Flat x402 Scan Fee</div>
+                  </div>
+                </div>
+
+                <!-- Progress Bar Section -->
+                <div class="space-y-3 mb-8">
+                  <div class="flex justify-between text-sm">
+                    <span class="text-zinc-400">Heuristic Accuracy</span>
+                    <span class="text-white font-medium">99.9%</span>
+                  </div>
+                  <div class="h-2 w-full overflow-hidden rounded-full bg-zinc-800/50">
+                    <div class="h-full w-[99%] rounded-full bg-gradient-to-r from-white to-[#00ff9d]"></div>
+                  </div>
+                </div>
+
+                <div class="h-px w-full bg-white/10 mb-6"></div>
+
+                <!-- Mini Stats Grid -->
+                <div class="grid grid-cols-3 gap-4 text-center">
+                  <div class="flex flex-col items-center justify-center transition-transform hover:-translate-y-1 cursor-default">
+                    <span class="text-xl font-bold text-white sm:text-2xl">< 1s</span>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-medium sm:text-xs">Latency</span>
+                  </div>
+                  <div class="w-px h-full bg-white/10 mx-auto"></div>
+                  <div class="flex flex-col items-center justify-center transition-transform hover:-translate-y-1 cursor-default">
+                    <span class="text-xl font-bold text-white sm:text-2xl">x402</span>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-medium sm:text-xs">Protocol</span>
+                  </div>
+                  <div class="w-px h-full bg-white/10 mx-auto"></div>
+                  <div class="flex flex-col items-center justify-center transition-transform hover:-translate-y-1 cursor-default">
+                    <span class="text-xl font-bold text-white sm:text-2xl">EIP-712</span>
+                    <span class="text-[10px] uppercase tracking-wider text-zinc-500 font-medium sm:text-xs">Proof</span>
+                  </div>
+                </div>
+
+                <!-- Tag Pills -->
+                <div class="mt-8 flex flex-wrap gap-2">
+                  <div class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium tracking-wide text-zinc-300">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    MAINNET ACTIVE
+                  </div>
+                  <div class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium tracking-wide text-zinc-300">
+                    <i data-lucide="crown" class="w-3 h-3 text-yellow-500"></i>
+                    A2MCP SECURED
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Marquee Card -->
+            <div class="animate-fade-in delay-500 relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 py-8 backdrop-blur-xl">
+              <h3 class="mb-6 px-8 text-sm font-medium text-zinc-400">Powered by Web3 Standards</h3>
+              
+              <div 
+                class="relative flex overflow-hidden"
+                style="mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);"
+              >
+                <div class="animate-marquee flex gap-12 whitespace-nowrap px-4">
+                  <!-- Repeated content for marquee -->
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="hexagon" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">OKX.AI</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="triangle" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">XLayer</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="cpu" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">A2MCP</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="ghost" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">Mystery Shopper</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="hexagon" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">OKX.AI</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="triangle" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">XLayer</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="cpu" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">A2MCP</span></div>
+                  <div class="flex items-center gap-2 opacity-50 transition-all hover:opacity-100 hover:scale-105 cursor-default grayscale hover:grayscale-0"><i data-lucide="ghost" class="h-6 w-6 text-white fill-current"></i><span class="text-lg font-bold text-white tracking-tight">Mystery Shopper</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
-
-      <div class="footer">
-        Automated Heuristic Security Analysis • <span>Not an official smart contract audit</span>
+      
+      <div class="text-center p-6 text-xs text-zinc-600 border-t border-white/5 bg-black/20 mt-auto">
+        ⚠️ DISCLAIMER: Pre-Flight provides heuristic risk signals based on automated on-chain behavior analysis. It is NOT an official smart contract audit.
       </div>
+      
+      <script>
+        lucide.createIcons();
+      </script>
     </body>
     </html>
     `;
+    res.send(html);
+}
     res.send(html);
 }
