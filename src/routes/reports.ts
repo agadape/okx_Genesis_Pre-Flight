@@ -53,7 +53,7 @@ export async function reportHandler(req: Request, res: Response) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Pre-Flight | Dossier ${scan.scan_id.substring(0,8)}</title>
+      <title>Pre-Flight | Dossier ${scan_id.substring(0,8)}</title>
       <script src="https://cdn.tailwindcss.com"></script>
       <script src="https://unpkg.com/lucide@latest"></script>
       <style>
@@ -100,9 +100,9 @@ export async function reportHandler(req: Request, res: Response) {
             <div>
               <h1 class="text-2xl font-bold text-white mb-2 tracking-tight">Security Audit Report</h1>
               <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-400">
-                <span>ID: <code class="text-zinc-300 bg-white/5 px-1.5 py-0.5 rounded">${scan.scan_id}</code></span>
+                <span>ID: <code class="text-zinc-300 bg-white/5 px-1.5 py-0.5 rounded">${scan.scan_id || scan_id}</code></span>
                 ${scan.live_verification?.attempted ? `<span class="inline-flex items-center gap-1 text-green-400 bg-green-400/10 px-2 py-0.5 rounded border border-green-400/20"><i data-lucide="shield" class="w-3 h-3"></i> EIP-712 Signed</span>` : ''}
-                ${scan.attestation ? `<a href="/verify/${scan.scan_id}" class="inline-flex items-center gap-1 text-zinc-300 bg-white/10 hover:bg-white/20 transition-colors px-2 py-0.5 rounded border border-white/20"><i data-lucide="check-circle" class="w-3 h-3"></i> Verify Sig</a>` : ''}
+                ${scan.attestation ? `<a href="/verify/${scan.scan_id || scan_id}" class="inline-flex items-center gap-1 text-zinc-300 bg-white/10 hover:bg-white/20 transition-colors px-2 py-0.5 rounded border border-white/20"><i data-lucide="check-circle" class="w-3 h-3"></i> Verify Sig</a>` : ''}
               </div>
             </div>
             
