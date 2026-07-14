@@ -8,9 +8,19 @@ export async function reportHandler(req: Request, res: Response) {
 
     if (!scan) {
       res.status(404).send(`
-        <html>
-          <head><title>Report Not Found</title><style>body{font-family:sans-serif;text-align:center;padding:50px;}</style></head>
-          <body><h2>Scan ID not found.</h2><p>The report may have expired or never existed.</p></body>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>404 - Not Found</title>
+          <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-zinc-950 text-white flex items-center justify-center min-h-screen font-mono">
+          <div class="text-center">
+            <h1 class="text-4xl text-red-500 font-bold mb-4">404: DOSSIER NOT FOUND</h1>
+            <p class="text-zinc-500">The requested scan ID does not exist or has been purged.</p>
+          </div>
+        </body>
         </html>
       `);
       return;
@@ -18,9 +28,19 @@ export async function reportHandler(req: Request, res: Response) {
 
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
 
-    const isDanger = scan.status === "BAHAYA";
-    const statusColor = isDanger ? "#ff4444" : (scan.status === "WASPADA" ? "#ffbb33" : "#00C851");
+    const isDanger = scan.status === "CRITICAL";
+    const isWarning = scan.status === "WARNING";
     
+    let statusStyle = "bg-green-500/10 text-green-400 border-green-500/30";
+    let statusIcon = "shield-check";
+    if (isDanger) {
+      statusStyle = "bg-red-500/10 text-red-400 border-red-500/30 animate-pulse";
+      statusIcon = "shield-alert";
+    } else if (isWarning) {
+      statusStyle = "bg-yellow-500/10 text-yellow-400 border-yellow-500/30";
+      statusIcon = "alert-triangle";
+    }
+
     // Format timestamp
     const dateStr = scan.timestamp ? new Date(scan.timestamp).toLocaleString() : "Unknown";
 
@@ -33,92 +53,140 @@ export async function reportHandler(req: Request, res: Response) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Trust & Safety Report - ${scan.scan_id}</title>
+      <title>Pre-Flight | Dossier ${scan.scan_id.substring(0,8)}</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://unpkg.com/lucide@latest"></script>
       <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 20px; margin-bottom: 20px; }
-        .status-badge { background-color: ${statusColor}; color: white; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 1.2em; }
-        .score { font-size: 3em; font-weight: bold; color: ${statusColor}; margin: 10px 0; }
-        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        .detail-item { background: #f9f9f9; padding: 15px; border-radius: 6px; }
-        .reasons { background: #fff0f0; border-left: 4px solid #ff4444; padding: 15px; margin-bottom: 20px; }
-        .reasons h3 { margin-top: 0; color: #cc0000; }
-        ul { margin: 0; padding-left: 20px; }
-        li { margin-bottom: 10px; }
-        .disclaimer { font-size: 0.85em; color: #666; font-style: italic; border-top: 1px solid #eee; padding-top: 15px; margin-top: 30px; }
-        .share-btn { display: inline-block; background-color: #1DA1F2; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; font-weight: bold; margin-top: 20px; }
-        .share-btn:hover { background-color: #1a91da; }
+        body { background-color: #050505; color: #fafafa; }
+        .grid-bg {
+          background-image: linear-gradient(to right, rgba(255,102,0, 0.03) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(255,102,0, 0.03) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+        .typewriter {
+          overflow: hidden;
+          border-right: .15em solid #ff6600;
+          white-space: nowrap;
+          margin: 0 auto;
+          letter-spacing: .05em;
+          animation: typing 2.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #ff6600; } }
       </style>
     </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <div>
-            <h1>Security Audit Report</h1>
-            <p>ID: <code>${scan.scan_id}</code></p>
-            ${scan.live_verification?.attempted ? `<div style="display:inline-block; margin-top:5px; padding:4px 8px; background:#e8f5e9; color:#2e7d32; border:1px solid #4caf50; border-radius:4px; font-size:0.85em; font-weight:bold;">🔐 Cryptographically Signed (EIP-712)</div>` : ''}
-            ${scan.attestation ? `<div style="display:inline-block; margin-top:5px; margin-left: 10px;"><a href="/verify/${scan.scan_id}" style="padding:4px 8px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; font-size:0.85em; text-decoration:none; font-weight:bold;">✅ Verify Signature</a></div>` : ''}
+    <body class="grid-bg font-sans min-h-screen p-4 sm:p-8 flex flex-col">
+      
+      <!-- Ambient Glow -->
+      <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-orange-500/5 blur-[100px] pointer-events-none rounded-full"></div>
+
+      <div class="relative z-10 max-w-4xl w-full mx-auto flex-grow flex flex-col">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col mb-8 gap-2">
+          <a href="/leaderboard" class="inline-flex items-center gap-2 text-zinc-500 hover:text-[#ff6600] transition-colors text-sm font-bold uppercase tracking-widest w-fit mb-2">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Live Intel
+          </a>
+          <div class="font-mono text-[#ff6600] text-lg sm:text-xl font-bold inline-block typewriter">
+            root@pre-flight:~$ cat /var/log/dossier.log
           </div>
-          <div class="status-badge">${scan.status}</div>
+          <p class="text-zinc-500 text-sm font-mono mt-1">Classified automated security analysis report.</p>
         </div>
 
-        <div class="details-grid">
-          <div class="detail-item">
-            <strong>Target:</strong><br>
-            <span style="word-break: break-all;">${scan.target_id}</span>
+        <!-- Glassmorphic Card -->
+        <div class="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl p-6 sm:p-10">
+          
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/10 pb-6 mb-6 gap-6">
+            <div>
+              <h1 class="text-2xl font-bold text-white mb-2 tracking-tight">Security Audit Report</h1>
+              <div class="flex flex-wrap items-center gap-3 font-mono text-xs text-zinc-400">
+                <span>ID: <code class="text-zinc-300 bg-white/5 px-1.5 py-0.5 rounded">${scan.scan_id}</code></span>
+                ${scan.live_verification?.attempted ? `<span class="inline-flex items-center gap-1 text-green-400 bg-green-400/10 px-2 py-0.5 rounded border border-green-400/20"><i data-lucide="shield" class="w-3 h-3"></i> EIP-712 Signed</span>` : ''}
+                ${scan.attestation ? `<a href="/verify/${scan.scan_id}" class="inline-flex items-center gap-1 text-zinc-300 bg-white/10 hover:bg-white/20 transition-colors px-2 py-0.5 rounded border border-white/20"><i data-lucide="check-circle" class="w-3 h-3"></i> Verify Sig</a>` : ''}
+              </div>
+            </div>
+            
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border ${statusStyle} text-sm font-bold uppercase tracking-widest shadow-lg">
+              <i data-lucide="${statusIcon}" class="w-4 h-4"></i>
+              ${scan.status}
+            </div>
           </div>
-          <div class="detail-item">
-            <strong>Target Type:</strong><br>
-            ${scan.target_type.toUpperCase()}
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+              <div class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Target Entity</div>
+              <div class="font-mono text-zinc-200 truncate" title="${scan.target_id}">${scan.target_id}</div>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+              <div class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Entity Class</div>
+              <div class="font-mono text-zinc-200 uppercase">${scan.target_type}</div>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+              <div class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Timestamp</div>
+              <div class="font-mono text-zinc-200">${dateStr}</div>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+              <div class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-1">Data Telemetry</div>
+              <div class="font-mono text-zinc-200 uppercase">${scan.data_source}</div>
+            </div>
           </div>
-          <div class="detail-item">
-            <strong>Timestamp:</strong><br>
-            ${dateStr}
+
+          <div class="text-center py-8 border-y border-white/10 mb-8 bg-gradient-to-b from-transparent to-white/[0.02]">
+            <div class="text-sm font-bold uppercase tracking-widest text-zinc-500 mb-2">Calculated Heuristic Score</div>
+            <div class="text-7xl font-bold font-mono tracking-tighter mb-2" style="color: ${isDanger ? '#ff4444' : (isWarning ? '#ffbb33' : '#00C851')}">
+              ${scan.score} <span class="text-2xl text-zinc-600">/100</span>
+            </div>
+            <p class="text-zinc-500 text-sm font-mono">Analyzed using ${scan.signals_available} of ${scan.signals_total} total risk parameters.</p>
           </div>
-          <div class="detail-item">
-            <strong>Data Source:</strong><br>
-            ${scan.data_source.toUpperCase()}
+
+          ${scan.live_verification?.findings && scan.live_verification.findings.length > 0 ? `
+          <div class="mb-6 bg-green-500/5 border-l-4 border-green-500 p-5 rounded-r-xl">
+            <h3 class="flex items-center gap-2 text-green-400 font-bold uppercase tracking-widest text-sm mb-3">
+              <i data-lucide="bot" class="w-4 h-4"></i> Mystery Shopper Intelligence
+            </h3>
+            <ul class="space-y-2 font-mono text-sm text-zinc-300 list-disc list-inside">
+              ${scan.live_verification.findings.map((f: any) => `<li>${f}</li>`).join('')}
+            </ul>
           </div>
-        </div>
+          ` : ''}
 
-        <div style="text-align: center; margin: 40px 0;">
-          <div>Trust Score</div>
-          <div class="score">${scan.score} <span style="font-size: 0.3em; color: #666;">/ 100</span></div>
-          <p>Based on ${scan.signals_available} out of ${scan.signals_total} possible risk signals.</p>
-        </div>
+          ${scan.reasons.length > 0 ? `
+          <div class="mb-6 bg-red-500/5 border-l-4 border-red-500 p-5 rounded-r-xl">
+            <h3 class="flex items-center gap-2 text-red-400 font-bold uppercase tracking-widest text-sm mb-3">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i> Detected Risk Factors
+            </h3>
+            <ul class="space-y-2 font-mono text-sm text-zinc-300 list-disc list-inside">
+              ${scan.reasons.map(r => `<li>${r}</li>`).join('')}
+            </ul>
+          </div>
+          ` : `
+          <div class="mb-6 bg-green-500/5 border-l-4 border-green-500 p-5 rounded-r-xl">
+            <h3 class="flex items-center gap-2 text-green-400 font-bold uppercase tracking-widest text-sm mb-2">
+              <i data-lucide="check-circle" class="w-4 h-4"></i> No Critical Risks Found
+            </h3>
+            <p class="font-mono text-sm text-zinc-400">This entity passed all baseline automated security checks.</p>
+          </div>
+          `}
 
-        ${scan.live_verification?.findings && scan.live_verification.findings.length > 0 ? `
-        <div class="reasons" style="border-left: 4px solid #00C851; background: #e8f5e9;">
-          <h3 style="color: #007E33;">Live Verification Findings (Mystery Shopper):</h3>
-          <ul>
-            ${scan.live_verification.findings.map((f: any) => `<li>${f}</li>`).join('')}
-          </ul>
-        </div>
-        ` : ''}
+          <div class="mt-8 flex justify-center">
+            <a href="${shareUrl}" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#ff6600] hover:bg-[#ff8533] text-black font-bold text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(255,102,0,0.4)] transition-all hover:scale-105">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="w-4 h-4 fill-current"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g></svg>
+              Broadcast Alert
+            </a>
+          </div>
 
-        ${scan.reasons.length > 0 ? `
-        <div class="reasons">
-          <h3>Risk Factors Detected:</h3>
-          <ul>
-            ${scan.reasons.map(r => `<li>${r}</li>`).join('')}
-          </ul>
-        </div>
-        ` : `
-        <div style="background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin-bottom: 20px;">
-          <h3>No Critical Risk Factors Detected</h3>
-          <p>This agent passed all baseline automated checks.</p>
-        </div>
-        `}
-
-        <div style="text-align: center;">
-          <a href="${shareUrl}" target="_blank" class="share-btn">🐦 Share Alert on X (Twitter)</a>
-        </div>
-
-        <div class="disclaimer">
-          <strong>Disclaimer:</strong> This report is generated by the Pre-Flight Trust & Safety scanner using automated heuristic analysis. It is NOT an official OKX audit, nor a guarantee of absolute safety. Users are strongly advised to perform their own due diligence before interacting with or granting permissions to any AI agent, ASP, or Skill.
+          <div class="mt-12 pt-6 border-t border-white/10 text-center">
+            <p class="text-xs text-zinc-600 font-mono leading-relaxed">
+              <strong>DISCLAIMER:</strong> This report is generated by the Pre-Flight Trust & Safety scanner using automated heuristic analysis. It is NOT an official OKX audit. Verify on-chain data independently.
+            </p>
+          </div>
+          
         </div>
       </div>
+      
+      <script>
+        lucide.createIcons();
+      </script>
     </body>
     </html>
     `;

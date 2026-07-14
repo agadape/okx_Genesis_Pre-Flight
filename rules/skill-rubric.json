@@ -17,8 +17,8 @@
       "label": "Private Key Request Detection",
       "weight": 0,
       "type": "instant_fail",
-      "fail_status": "BAHAYA",
-      "fail_reason": "Skill requests private key, seed phrase, or wallet export — critical security risk. Immediate BAHAYA status regardless of other signals."
+      "fail_status": "CRITICAL",
+      "fail_reason": "Skill requests private key, seed phrase, or wallet export â€” critical security risk. Immediate BAHAYA status regardless of other signals."
     },
     {
       "id": "official_source",
@@ -74,9 +74,9 @@
     }
   ],
   "status_thresholds": {
-    "AMAN": 75,
-    "WASPADA": 40,
-    "BAHAYA": 0
+    "SAFE": 75,
+    "WARNING": 40,
+    "CRITICAL": 0
   },
   "min_signals_required": 3,
   "instant_fail_rules": ["private_key_request"]

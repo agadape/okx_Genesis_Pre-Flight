@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 export type TargetType = "asp" | "skill" | "external";
 
-export type RiskStatus = "AMAN" | "WASPADA" | "BAHAYA" | "DATA_BELUM_CUKUP";
+export type RiskStatus = "SAFE" | "WARNING" | "CRITICAL" | "INSUFFICIENT_DATA";
 
 export type DataSource = "live" | "mocked";
 
@@ -65,9 +65,9 @@ export function mapScoreToStatus(
   score: number,
   thresholds: Rubric["status_thresholds"]
 ): RiskStatus {
-  if (score >= thresholds.AMAN) return "AMAN";
-  if (score >= thresholds.WASPADA) return "WASPADA";
-  return "BAHAYA";
+  if (score >= thresholds.AMAN) return "SAFE";
+  if (score >= thresholds.WASPADA) return "WARNING";
+  return "CRITICAL";
 }
 
 export async function handleScan(req: Request, res: Response): Promise<void> {
@@ -132,19 +132,19 @@ export async function handleScan(req: Request, res: Response): Promise<void> {
             // Downgrade status if it failed promises
             const hasBaitAndSwitch = liveVerification.findings.some(f => f.includes("Bait-and-switch"));
             if (hasBaitAndSwitch) {
-               result.status = "BAHAYA";
+               result.status = "CRITICAL";
                result.score = Math.min(result.score, 30);
                result.reasons.push("[Live Test] Bait-and-switch pricing detected");
-            } else if (result.status === "AMAN") {
-               result.status = "WASPADA";
+            } else if (result.status === "SAFE") {
+               result.status = "WARNING";
                result.score = Math.min(result.score, 70);
                result.reasons.push("[Live Test] Service failed to keep promises or was slow/broken");
             }
          } else {
             // Boost score slightly for proven live endpoint
             result.score = Math.min(100, result.score + 10);
-            if (result.status === "WASPADA" && result.score >= 75) {
-               result.status = "AMAN";
+            if (result.status === "WARNING" && result.score >= 75) {
+               result.status = "SAFE";
             }
          }
       }

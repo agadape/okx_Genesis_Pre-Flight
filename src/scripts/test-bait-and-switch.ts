@@ -70,9 +70,9 @@ async function main() {
             if (liveVerification.promise_kept) {
                 result.score = Math.min(100, result.score + 10);
             } else if (liveVerification.findings.some(f => f.includes("Bait-and-switch"))) {
-                result.status = "BAHAYA";
+                result.status = "CRITICAL";
                 result.score = 30; // override score as penalty
-                result.reasons.push("🚨 CRITICAL: Target engaged in bait-and-switch pricing during live verification.");
+                result.reasons.push("ðŸš¨ CRITICAL: Target engaged in bait-and-switch pricing during live verification.");
             }
         }
 
@@ -80,7 +80,7 @@ async function main() {
         const finalResponse = await buildResponse(result);
         
         console.log("==========================================");
-        console.log("✅ BAIT-AND-SWITCH TEST COMPLETED!");
+        console.log("âœ… BAIT-AND-SWITCH TEST COMPLETED!");
         console.log("Scan ID:", finalResponse.data.scan_id);
         console.log("Score:", finalResponse.data.score);
         console.log("Status:", finalResponse.data.status);

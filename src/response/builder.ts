@@ -35,7 +35,7 @@ export async function buildResponse(result: ScanResult): Promise<PreFlightRespon
     }
   }
 
-  if (finalResult.status === "BAHAYA" || finalResult.attestation) {
+  if (finalResult.status === "CRITICAL" || finalResult.attestation) {
     finalResult.report_url = `https://okx-genesis-pre-flight.vercel.app/reports/${scan_id}`;
   }
 

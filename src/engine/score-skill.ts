@@ -26,9 +26,9 @@ export function processSkill(targetId: string, fetchedData: FetchedData): ScanRe
   if (currentRubric.instant_fail_rules && currentRubric.instant_fail_rules.includes("private_key_request")) {
     if (signals["private_key_request"] === true) {
       return {
-        status: "BAHAYA",
+        status: "CRITICAL",
         score: 0,
-        reasons: ["Skill requests private key, seed phrase, or wallet export — critical security risk. Immediate BAHAYA status regardless of other signals."],
+        reasons: ["Skill requests private key, seed phrase, or wallet export â€” critical security risk. Immediate BAHAYA status regardless of other signals."],
         target_type: "skill",
         target_id: targetId,
         data_source: source,
@@ -93,7 +93,7 @@ export function processSkill(targetId: string, fetchedData: FetchedData): ScanRe
   let status = mapScoreToStatus(finalScore, currentRubric.status_thresholds);
 
   if (signalsAvailable < currentRubric.min_signals_required) {
-    status = "DATA_BELUM_CUKUP";
+    status = "INSUFFICIENT_DATA";
     reasons.unshift("Insufficient data to perform a reliable scan");
   }
 

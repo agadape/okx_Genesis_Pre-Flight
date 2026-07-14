@@ -96,12 +96,12 @@ export function scoreExternalAgent(targetId: string, data: ExternalManifestData)
   let status = mapScoreToStatus(totalScore, externalRubric.status_thresholds);
 
   if (isInstantFail) {
-    status = "BAHAYA";
+    status = "CRITICAL";
     totalScore = 0;
   }
 
   if (signalsAvailable < externalRubric.min_signals_required) {
-    status = "DATA_BELUM_CUKUP";
+    status = "INSUFFICIENT_DATA";
   }
 
   return {

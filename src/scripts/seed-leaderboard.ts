@@ -10,7 +10,7 @@ export async function seed() {
         {
             target_type: "external",
             target_id: "[SAMPLE] https://example.com/manifest.json",
-            status: "AMAN",
+            status: "SAFE",
             score: 95,
             data_source: "live",
             signals_available: 8,
@@ -20,7 +20,7 @@ export async function seed() {
         {
             target_type: "asp",
             target_id: "[SAMPLE] defi-portfolio-analyzer-5100",
-            status: "WASPADA",
+            status: "WARNING",
             score: 65,
             data_source: "mocked",
             signals_available: 5,
@@ -30,7 +30,7 @@ export async function seed() {
         {
             target_type: "skill",
             target_id: "[SAMPLE] fast-swap-pro-99",
-            status: "BAHAYA",
+            status: "CRITICAL",
             score: 10,
             data_source: "mocked",
             signals_available: 7,
@@ -49,7 +49,7 @@ export async function seed() {
             timestamp,
         };
 
-        if (finalScan.status === "BAHAYA") {
+        if (finalScan.status === "CRITICAL") {
             finalScan.report_url = `https://okx-genesis-pre-flight.vercel.app/reports/${scan_id}`;
         }
 

@@ -26,7 +26,7 @@ async function main() {
     // Boost score for success
     if (liveVerification.promise_kept) {
         result.score = Math.min(100, result.score + 10);
-        if (result.status === "WASPADA" && result.score >= 75) result.status = "AMAN";
+        if (result.status === "WARNING" && result.score >= 75) result.status = "SAFE";
     }
 
     // 3. Build Response & Sign Attestation (Idea K-lite) & Save to Redis
@@ -34,7 +34,7 @@ async function main() {
     const finalResponse = await buildResponse(result);
     
     console.log("==========================================");
-    console.log("✅ E2E TEST COMPLETED SUCCESSFULLY!");
+    console.log("âœ… E2E TEST COMPLETED SUCCESSFULLY!");
     console.log("Scan ID:", finalResponse.data.scan_id);
     console.log("Attestation Signed by:", finalResponse.data.attestation?.signer_address);
     console.log("Live Verification:", finalResponse.data.live_verification);

@@ -66,7 +66,7 @@ export function processASP(targetId: string, fetchedData: FetchedData): ScanResu
   let status = mapScoreToStatus(finalScore, currentRubric.status_thresholds);
 
   if (signalsAvailable < currentRubric.min_signals_required) {
-    status = "DATA_BELUM_CUKUP";
+    status = "INSUFFICIENT_DATA";
     reasons.unshift("Insufficient data to perform a reliable scan");
   }
 

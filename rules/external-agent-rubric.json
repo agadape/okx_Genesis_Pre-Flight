@@ -29,7 +29,7 @@
       "label": "Private Key Request Pattern",
       "weight": 0,
       "type": "instant_fail",
-      "fail_status": "BAHAYA",
+      "fail_status": "CRITICAL",
       "fail_reason": "Manifest requests sensitive wallet private keys or seed phrases."
     },
     {
@@ -70,9 +70,9 @@
     }
   ],
   "status_thresholds": {
-    "AMAN": 75,
-    "WASPADA": 40,
-    "BAHAYA": 0
+    "SAFE": 75,
+    "WARNING": 40,
+    "CRITICAL": 0
   },
   "min_signals_required": 3,
   "instant_fail_rules": ["private_key_request"]

@@ -87,9 +87,9 @@
     }
   ],
   "status_thresholds": {
-    "AMAN": 75,
-    "WASPADA": 40,
-    "BAHAYA": 0
+    "SAFE": 75,
+    "WARNING": 40,
+    "CRITICAL": 0
   },
   "min_signals_required": 3
 }

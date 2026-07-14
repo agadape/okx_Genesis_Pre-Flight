@@ -6,8 +6,8 @@ export async function leaderboardHandler(req: Request, res: Response) {
     let scans = await getRecentScans(50);
 
     const rows = scans.map(scan => {
-      const isDanger = scan.status === "BAHAYA";
-      const isWarning = scan.status === "WASPADA";
+      const isDanger = scan.status === "CRITICAL";
+      const isWarning = scan.status === "WARNING";
       
       let statusStyle = "bg-green-500/10 text-green-400 border-green-500/30";
       let statusIcon = "shield-check";
