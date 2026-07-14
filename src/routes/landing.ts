@@ -35,13 +35,12 @@ export function landingHandler(req: Request, res: Response) {
     </head>
     <body class="relative w-full bg-zinc-950 text-white overflow-x-hidden font-sans min-h-screen flex flex-col">
       
-      <!-- Background Image with Gradient Mask (Replace URL with your generated image later) -->
-      <div 
-        class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-30"
-        style="mask-image: linear-gradient(180deg, transparent, black 0%, black 70%, transparent); -webkit-mask-image: linear-gradient(180deg, transparent, black 0%, black 70%, transparent);"
-      ></div>
+      <!-- Background Image -->
+      <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
+      <!-- Subtle top gradient to ensure text readability -->
+      <div class="absolute inset-0 z-0 bg-gradient-to-b from-zinc-950 via-transparent to-zinc-950"></div>
 
-      <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pt-24 pb-12 sm:px-6 md:pt-32 md:pb-20 lg:px-8 flex-grow">
+      <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pt-8 pb-12 sm:px-6 md:pt-12 md:pb-20 lg:px-8 flex-grow flex flex-col justify-center">
         <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8 items-start">
           
           <!-- LEFT COLUMN -->
@@ -58,14 +57,9 @@ export function landingHandler(req: Request, res: Response) {
             </div>
 
             <!-- Heading -->
-            <h1 
-              class="animate-fade-in delay-200 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tighter leading-[0.9]"
-              style="mask-image: linear-gradient(180deg, black 0%, black 80%, transparent 100%); -webkit-mask-image: linear-gradient(180deg, black 0%, black 80%, transparent 100%);"
-            >
+            <h1 class="animate-fade-in delay-200 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tighter leading-[1.05]">
               Securing the Next<br />
-              <span class="bg-gradient-to-br from-white via-white to-[#00ff9d] bg-clip-text text-transparent">
-                Generation
-              </span><br />
+              <span class="bg-gradient-to-r from-green-400 to-[#00ff9d] bg-clip-text text-transparent">Generation</span><br />
               of AI Agents
             </h1>
 
@@ -76,7 +70,7 @@ export function landingHandler(req: Request, res: Response) {
 
             <!-- CTA Buttons -->
             <div class="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4">
-              <a href="/leaderboard" class="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-zinc-950 transition-all hover:scale-[1.02] hover:bg-zinc-200 active:scale-[0.98] cursor-pointer">
+              <a href="/leaderboard" class="group inline-flex items-center justify-center gap-2 rounded-full bg-[#00ff9d] text-black px-8 py-4 text-sm font-bold shadow-[0_0_20px_rgba(0,255,157,0.3)] transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,255,157,0.5)] active:scale-[0.98] cursor-pointer">
                 View Leaderboard
                 <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
               </a>
@@ -157,11 +151,11 @@ export function landingHandler(req: Request, res: Response) {
 
             <!-- Marquee Card -->
             <div class="animate-fade-in delay-500 relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 py-8 backdrop-blur-xl">
-              <h3 class="mb-6 px-8 text-sm font-medium text-zinc-400">Powered by Web3 Standards</h3>
+              <h3 class="mb-6 px-8 text-sm font-medium text-zinc-400 text-center">Powered by Web3 Standards</h3>
               
               <div 
                 class="relative flex overflow-hidden"
-                style="mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);"
+                style="mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);"
               >
                 <div class="animate-marquee flex gap-12 whitespace-nowrap px-4">
                   <!-- Repeated content for marquee -->
