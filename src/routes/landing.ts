@@ -36,17 +36,15 @@ export function landingHandler(req: Request, res: Response) {
     <body class="relative w-full bg-zinc-950 text-white overflow-x-hidden font-sans min-h-screen flex flex-col">
       
       <!-- Background Video -->
-      <video autoplay loop muted playsinline class="absolute inset-0 z-0 w-full h-full object-cover opacity-[0.15] pointer-events-none">
+      <video autoplay loop muted playsinline class="absolute inset-0 z-0 w-full h-full object-cover opacity-60 pointer-events-none">
         <source src="/bg-video.mp4" type="video/mp4">
       </video>
-      <!-- Subtle top gradient to ensure text readability -->
-      <div class="absolute inset-0 z-0 bg-gradient-to-b from-zinc-950 via-transparent to-zinc-950"></div>
 
-      <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pt-8 pb-12 sm:px-6 md:pt-12 md:pb-20 lg:px-8 flex-grow flex flex-col justify-center">
+      <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pt-4 pb-8 sm:px-6 md:pt-4 md:pb-12 lg:px-8 flex-grow flex flex-col justify-center">
         <div class="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8 items-start">
           
           <!-- LEFT COLUMN -->
-          <div class="lg:col-span-7 flex flex-col justify-center space-y-8 pt-8">
+          <div class="lg:col-span-7 flex flex-col justify-center space-y-6 pt-0">
             
             <!-- Badge -->
             <div class="animate-fade-in delay-100">
