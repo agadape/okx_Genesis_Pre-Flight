@@ -53,7 +53,7 @@ export function landingHandler(req: Request, res: Response) {
               <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 backdrop-blur-md transition-colors hover:bg-white/10">
                 <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
                   Agent ID: #5549
-                  <i data-lucide="shield-check" class="w-3.5 h-3.5 text-green-400"></i>
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5 text-orange-400"></i>
                 </span>
               </div>
             </div>
@@ -61,7 +61,7 @@ export function landingHandler(req: Request, res: Response) {
             <!-- Heading -->
             <h1 class="animate-fade-in delay-200 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-medium tracking-tighter leading-[1.05]">
               Securing the Next<br />
-              <span class="bg-gradient-to-r from-green-400 to-[#00ff9d] bg-clip-text text-transparent">Generation</span><br />
+              <span class="bg-gradient-to-r from-orange-400 to-[#ff6600] bg-clip-text text-transparent">Generation</span><br />
               of AI Agents
             </h1>
 
@@ -72,7 +72,7 @@ export function landingHandler(req: Request, res: Response) {
 
             <!-- CTA Buttons -->
             <div class="animate-fade-in delay-400 flex flex-col sm:flex-row gap-4">
-              <a href="/leaderboard" class="group inline-flex items-center justify-center gap-2 rounded-full bg-[#00ff9d] text-black px-8 py-4 text-sm font-bold shadow-[0_0_20px_rgba(0,255,157,0.3)] transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(0,255,157,0.5)] active:scale-[0.98] cursor-pointer">
+              <a href="/leaderboard" class="group inline-flex items-center justify-center gap-2 rounded-full bg-[#ff6600] text-white px-8 py-4 text-sm font-bold shadow-[0_0_20px_rgba(255,102,0,0.3)] transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,102,0,0.5)] active:scale-[0.98] cursor-pointer">
                 View Leaderboard
                 <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
               </a>
@@ -90,12 +90,12 @@ export function landingHandler(req: Request, res: Response) {
             <!-- Stats Card -->
             <div class="animate-fade-in delay-500 relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-xl shadow-2xl">
               <!-- Card Glow Effect -->
-              <div class="absolute top-0 right-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-green-500/10 blur-3xl pointer-events-none"></div>
+              <div class="absolute top-0 right-0 -mr-16 -mt-16 h-64 w-64 rounded-full bg-orange-500/10 blur-3xl pointer-events-none"></div>
 
               <div class="relative z-10">
                 <div class="flex items-center gap-4 mb-8">
                   <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
-                    <i data-lucide="zap" class="h-6 w-6 text-green-400"></i>
+                    <i data-lucide="zap" class="h-6 w-6 text-orange-400"></i>
                   </div>
                   <div>
                     <div class="text-3xl font-bold tracking-tight text-white">0.05 USDT</div>
@@ -110,7 +110,7 @@ export function landingHandler(req: Request, res: Response) {
                     <span class="text-white font-medium">99.9%</span>
                   </div>
                   <div class="h-2 w-full overflow-hidden rounded-full bg-zinc-800/50">
-                    <div class="h-full w-[99%] rounded-full bg-gradient-to-r from-white to-[#00ff9d]"></div>
+                    <div class="h-full w-[99%] rounded-full bg-gradient-to-r from-white to-[#ff6600]"></div>
                   </div>
                 </div>
 
@@ -138,8 +138,8 @@ export function landingHandler(req: Request, res: Response) {
                 <div class="mt-8 flex flex-wrap gap-2">
                   <div class="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium tracking-wide text-zinc-300">
                     <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
                     </span>
                     MAINNET ACTIVE
                   </div>
